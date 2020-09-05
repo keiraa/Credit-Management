@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -184,18 +186,20 @@ class _UserPageState extends State<UserPage> {
                     otherCredit = snapshot.data['credits'];
                     print(otherCredit);
                   }
+                  otherCredit = otherCredit + credit;
                   firestore.collection('users').document(widget.name).updateData({
-                    'credits': widget.credit-credit
+                    'credits': userCredits
                   });
                   firestore.collection('users').document(name).updateData({
-                    'credits': otherCredit + credit
+                    'credits': otherCredit
                   });
                   firestore.collection('transactions').add({
                     'from': widget.name,
                     'to': name,
                     'credits': credit,
                     'timestamp': DateTime.now(),
-                  }).then((value) => customDialog(context));
+                  });
+                  customDialog(context);
                 }
               },
               child: Container(
@@ -283,4 +287,3 @@ customDialog(BuildContext context) {
         );
       });
 }
-
